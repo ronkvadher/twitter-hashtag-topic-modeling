@@ -7,11 +7,12 @@ import pandas as pd
 # --------------------------------------------------
 st.set_page_config(
     page_title="Twitter Hashtag Topic Modeling",
+    page_icon="📈",
     layout="wide"
 )
 
 # --------------------------------------------------
-# Load data once
+# Load data
 # --------------------------------------------------
 @st.cache_data
 def load_data():
@@ -20,81 +21,130 @@ def load_data():
 df = load_data()
 
 # --------------------------------------------------
-# Header
+# Sidebar Navigation
 # --------------------------------------------------
-st.title("Twitter Hashtag Topic Modeling")
+st.sidebar.title("Dashboard")
+st.sidebar.markdown("NLP Project Navigation")
 
-st.markdown(
-    """
-    This application presents the results of an NLP-based system that identifies
-    trending topics from Twitter hashtags using **Latent Dirichlet Allocation (LDA)**
-    and **automatic topic labeling with Large Language Models (LLMs)**.
-    """
+section = st.sidebar.radio(
+    "Select Section",
+    [
+        "Overview",
+        "Trending Hashtags",
+        "Topic Modeling",
+        "Dataset Preview"
+    ]
 )
 
-st.markdown("---")
+# --------------------------------------------------
+# OVERVIEW
+# --------------------------------------------------
+if section == "Overview":
+    st.title("Twitter Hashtag Topic Modeling")
+
+    st.markdown(
+        """
+        This project applies **Natural Language Processing (NLP)** techniques to analyze 
+        Twitter hashtags and identify **trending discussion topics**.
+
+        The system uses **Latent Dirichlet Allocation (LDA)** for topic discovery and 
+        **Large Language Models (LLMs)** for automatic topic labeling, improving the 
+        interpretability of unsupervised topics.
+        """
+    )
+
+    st.markdown("### Key Features")
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown(
+            """
+            - Hashtag extraction and preprocessing  
+            - Unsupervised topic modeling (LDA)  
+            - Automatic topic labeling (LLM-based)  
+            """
+        )
+
+    with col2:
+        st.markdown(
+            """
+            - Trend visualization  
+            - Modular and extensible design  
+            - Streamlit-based web interface  
+            """
+        )
 
 # --------------------------------------------------
-# Trending hashtags
+# TRENDING HASHTAGS
 # --------------------------------------------------
-st.subheader("Trending Hashtags")
+elif section == "Trending Hashtags":
+    st.title("Trending Hashtags")
 
-st.markdown(
-    "The following visualization shows the most frequently occurring hashtags "
-    "after preprocessing, indicating dominant trends in the dataset."
-)
+    st.markdown(
+        "The chart below shows the **top trending hashtags** based on frequency "
+        "after preprocessing."
+    )
 
-st.image(
-    "outputs/plots/top_hashtags.png",
-    use_column_width=True
-)
-
-st.markdown("---")
-
-# --------------------------------------------------
-# Topic modeling results
-# --------------------------------------------------
-st.subheader("Topic Modeling Results")
-
-st.markdown(
-    "Topics are first discovered using LDA and then automatically labeled "
-    "to improve interpretability."
-)
-
-col1, col2 = st.columns(2)
-
-with col1:
-    st.markdown("**LDA Topic Keywords**")
-    with open("outputs/topics.txt", "r") as f:
-        st.text(f.read())
-
-with col2:
-    st.markdown("**Automatically Generated Topic Labels**")
-    with open("outputs/topic_labels.txt", "r") as f:
-        st.text(f.read())
-
-st.markdown("---")
+    # Control image size using columns
+    col1, col2, col3 = st.columns([1, 3, 1])
+    with col2:
+        st.image(
+            "outputs/plots/top_hashtags.png",
+            caption="Top Trending Hashtags",
+            use_column_width=True
+        )
 
 # --------------------------------------------------
-# Dataset preview
+# TOPIC MODELING
 # --------------------------------------------------
-st.subheader("Cleaned Hashtag Text (Sample)")
+elif section == "Topic Modeling":
+    st.title("Topic Modeling Results")
 
-st.markdown(
-    "Below is a small sample of the cleaned hashtag text used for topic modeling."
-)
+    st.markdown(
+        "Topics are first discovered using **LDA** and then automatically labeled "
+        "using **Large Language Models**."
+    )
 
-st.dataframe(
-    df[["clean_text"]].head(30),
-    use_container_width=True
-)
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("LDA Topic Keywords")
+        st.markdown(
+            "These represent the most important keywords for each topic discovered "
+            "by the LDA model."
+        )
+        with open("outputs/topics.txt", "r") as f:
+            st.text(f.read())
+
+    with col2:
+        st.subheader("Automatically Labeled Topics")
+        st.markdown(
+            "These concise labels are generated automatically to improve topic "
+            "interpretability."
+        )
+        with open("outputs/topic_labels.txt", "r") as f:
+            st.text(f.read())
+
+# --------------------------------------------------
+# DATASET PREVIEW
+# --------------------------------------------------
+elif section == "Dataset Preview":
+    st.title("Cleaned Hashtag Dataset")
+
+    st.markdown(
+        "Below is a preview of the **cleaned hashtag text** used as input for topic modeling."
+    )
+
+    st.dataframe(
+        df[["clean_text"]].head(40),
+        use_container_width=True
+    )
 
 # --------------------------------------------------
 # Footer
 # --------------------------------------------------
 st.markdown("---")
 st.markdown(
-    "Developed by **Ronak Vadher**  \n"
-    "NLP Project — Twitter Hashtag Topic Modeling"
+    "Developed by **Ronak Vadher and Tanishq Bhalekar**  \n"
+    "NLP Project | Twitter Hashtag Topic Modeling"
 )
-
