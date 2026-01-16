@@ -162,7 +162,7 @@ elif section == "Downloads":
 # FOOTER
 st.markdown("---")
 st.markdown(
-    "Developed by **Ronak Vadher**  \n"
+    "Developed by **Ronak Vadher & Tanishq Bhalekar**  \n"
     "NLP Project | Twitter Hashtag Topic Modeling"
 )
 
